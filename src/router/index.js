@@ -1,20 +1,60 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import Inicio from '../views/Inicio'
+import Marcas from '../views/Marcas.vue';
+import nuevaMarca from '../views/NuevaMarca.vue';
+import Modelos from '../views/Modelos.vue';
+import nuevoModelo from '../views/NuevoModelo.vue';
+import Vehiculo from '../views/Vehiculo.vue';
+import nuevoVehiculo from '../views/NuevoVehiculo.vue';
+import Alquiler from '../views/Alquiler.vue';
+import Cliente from '../views/Cliente.vue';
 
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: HomeView
+    name: 'inicio',
+    component: Inicio
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  }
+    path: '/marcas',
+    name: 'marcas',
+    component: Marcas
+  },
+  {
+    path: '/nuevamarca',
+    name: 'nuevamarca',
+    component: nuevaMarca
+  },
+  {
+    path: '/modelos',
+    name: 'modelos',
+    component: Modelos
+  },
+  {
+    path: '/nuevomodelo',
+    name: 'nuevomodelo',
+    component: nuevoModelo
+  },
+  {
+    path: '/vehiculo',
+    name: 'vehiculo',
+    component: Vehiculo
+  },
+  {
+    path: '/nuevovehiculo',
+    name: 'nuevovehiculo',
+    component: nuevoVehiculo
+  },
+  {
+    path: '/alquiler',
+    name: 'alquiler',
+    component: Alquiler
+  },
+  {
+    path: '/cliente',
+    name: 'cliente',
+    component: Cliente
+  },
 ]
 
 const router = createRouter({

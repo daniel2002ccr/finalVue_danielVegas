@@ -1,30 +1,33 @@
 <template>
   <nav>
-    <router-link to="/">Casa</router-link> |
-    <router-link to="/about">About</router-link>
+    <router-link to="/">Inicio</router-link> 
+    <router-link to="/marcas">Marcas</router-link> 
+    <router-link to="/nuevamarca">Nueva marca</router-link> 
+    <router-link to="/modelos">Modelos</router-link> 
+    <router-link to="/nuevomodelo">Nuevo Modelo</router-link> 
+    <router-link to="/vehiculo">Vehículos</router-link> 
+    <router-link to="/nuevovehiculo">Nuevo Vehículo</router-link> 
+    <router-link to="/alquiler">Alquiler</router-link> 
+    <router-link to="/cliente">Clientes</router-link>
   </nav>
-  <router-view/>
+  <router-view />
 </template>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
 
 nav {
-  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: rgb(252, 245, 245);
+  width: 9%;
+  clear: right;
 }
 
 nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
+  padding: 20px;
+  text-decoration: none;
+  color: green;
 }
 </style>
