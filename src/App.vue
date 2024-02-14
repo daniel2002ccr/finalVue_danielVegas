@@ -14,7 +14,6 @@
 </template>
 
 <style>
-
 nav {
   display: flex;
   flex-direction: column;
@@ -22,7 +21,7 @@ nav {
   padding: 20px;
   background-color: rgb(252, 245, 245);
   width: 9%;
-  clear: right;
+  float: left;
 }
 
 nav a {

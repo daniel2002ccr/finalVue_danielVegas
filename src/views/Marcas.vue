@@ -1,65 +1,112 @@
 <template>
-    <div>
-      <h2>Marcas disponibles</h2>
+  <div class="container">
+    <h2>Listado de Marcas</h2>
+    <ul>
+      <li v-for="marca in marcasOrdenadasPorPrecioMedio" :key="marca.id" @click="mostrarModelos(marca)">
+        {{ marca.nombre }} - Precio medio: {{ calcularPrecioMedio(marca.id) }}
+      </li>
+    </ul>
+    <div v-if="marcaSeleccionada">
+      <h3>Modelos de {{ marcaSeleccionada.nombre }}</h3>
       <ul>
-        <li v-for="marca in marcasOrdenadas" :key="marca.id" @click="mostrarModelos(marca.id)">
-          {{ marca.nombre }} - Precio medio: {{ marca.precioMedio }}
+        <li v-for="modelo in modelosDeMarca" :key="modelo.id">
+          {{ modelo.modelo }} - Precio alquiler: {{ precioAlquiler(modelo) }}
         </li>
       </ul>
-
-      <div v-if="marcaSeleccionada !== null">
-        <h3>Modelos de {{ marcaSeleccionada.nombre }}</h3>
-        <ul>
-          <li v-for="modelo in modelosMarcaSeleccionada" :key="modelo.id">
-            {{ modelo.modelo }} - Precio de alquiler por día: {{ modelo.precioDia }}
-          </li>
-        </ul>
-      </div>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        marcas: [],
-        modelos: [],
-        vehiculos: [],
-        clientes: [],
-        marcaSeleccionada: null
-      };
-    },
-    computed: {
-      marcasOrdenadas() {
-        return this.marcas.map(marca => {
-          const modelosMarca = this.modelos.filter(modelo => modelo.idMarca === marca.id);
-          const precioMedio = modelosMarca.reduce((acc, modelo) => acc + modelo.precioDia, 0) / modelosMarca.length;
-          return { ...marca, precioMedio };
-        }).sort((a, b) => b.precioMedio - a.precioMedio);
-      },
-      modelosMarcaSeleccionada() {
-        if (this.marcaSeleccionada === null) return [];
-        return this.modelos.filter(modelo => modelo.idMarca === this.marcaSeleccionada.id);
-      }
-    },
-    methods: {
-      mostrarModelos(idMarca) {
-        this.marcaSeleccionada = this.marcas.find(marca => marca.id === idMarca);
-      }
-    },
-    mounted() {
-        fetch('C:\Users\alumnofp\Desktop\finalVue_danielVegas\finalvue_danielvegas\src\bbdd.json')
-      .then(response => response.json())
-      .then(data => {
-        this.marcas = data.marcas;
-        this.modelos = data.modelos;
-        this.vehiculos = data.vehiculos;
-        this.clientes = data.clientes;
-      })
-      .catch(error => {
-        console.error('Error al cargar los datos:', error);
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      marcas: [],
+      modelos: [],
+      vehiculos: [],
+      marcaSeleccionada: null
+    };
+  },
+  mounted() {
+    this.obtenerDatosMarcas();
+    this.obtenerDatosModelos();
+    this.obtenerDatosVehiculos();
+  },
+  computed: {
+    marcasOrdenadasPorPrecioMedio() {
+      return this.marcas.slice().sort((a, b) => {
+        const precioMedioA = this.calcularPrecioMedio(a.id);
+        const precioMedioB = this.calcularPrecioMedio(b.id);
+        return precioMedioB - precioMedioA;
       });
+    },
+    modelosDeMarca() {
+      return this.modelos.filter(modelo => modelo.idMarca === this.marcaSeleccionada.id);
+    }
+  },
+  methods: {
+    obtenerDatosMarcas() {
+      fetch('http://localhost:3000/marcas')
+        .then(response => response.json())
+        .then(data => {
+          this.marcas = data;
+        })
+        .catch(error => {
+          console.error('Error al cargar las marcas:', error);
+        });
+    },
+    obtenerDatosModelos() {
+      fetch('http://localhost:3000/modelos')
+        .then(response => response.json())
+        .then(data => {
+          this.modelos = data;
+        })
+        .catch(error => {
+          console.error('Error al cargar los modelos:', error);
+        });
+    },
+    obtenerDatosVehiculos() {
+      fetch('http://localhost:3000/vehiculos')
+        .then(response => response.json())
+        .then(data => {
+          this.vehiculos = data;
+        })
+        .catch(error => {
+          console.error('Error al cargar los vehículos:', error);
+        });
+    },
+    calcularPrecioMedio(idMarca) {
+      const modelosDeMarca = this.modelos.filter(modelo => modelo.idMarca === idMarca);
+      const vehiculosDeMarca = this.vehiculos.filter(vehiculo => {
+        return modelosDeMarca.some(modelo => modelo.id === vehiculo.idModelo);
+      });
+
+      if (vehiculosDeMarca.length === 0) return 0;
+
+      const precioTotal = vehiculosDeMarca.reduce((total, vehiculo) => total + vehiculo.precioDia, 0);
+      return precioTotal / vehiculosDeMarca.length;
+    },
+    mostrarModelos(marca) {
+      this.marcaSeleccionada = marca;
+    },
+    precioAlquiler(modelo) {
+      if (this.vehiculos.length === 0) return null;
+
+      const vehiculosDeMarca = this.vehiculos.filter(vehiculo => vehiculo.idModelo === modelo.id);
+      if (vehiculosDeMarca.length > 0) {
+        return vehiculosDeMarca[0].precioDia;
+      } else {
+        return null;
+      }
+    }
   }
 };
-  </script>
-  
+</script>
+<style scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+</style>
