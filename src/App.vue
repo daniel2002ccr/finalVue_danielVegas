@@ -29,4 +29,10 @@ nav a {
   text-decoration: none;
   color: green;
 }
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
 </style>

@@ -4,14 +4,15 @@
         <form @submit.prevent="agregarVehiculo">
             <div>
                 <label for="marca">Marca:</label>
-                <select id="marca" v-model="nuevoVehiculo.idMarca" :disabled="marcaSeleccionada">
+                <select id="marca" v-model="nuevoVehiculo.idMarca">
                     <option v-for="marca in marcas" :key="marca.id" :value="marca.id">{{ marca.nombre }}</option>
                 </select>
             </div>
             <div>
                 <label for="modelo">Modelo:</label>
-                <select id="modelo" v-model="nuevoVehiculo.idModelo" :disabled="modeloSeleccionado">
-                    <option v-for="modelo in modelos" :key="modelo.id" :value="modelo.id">{{ modelo.modelo }}</option>
+                <select id="modelo" v-model="nuevoVehiculo.idModelo" :disabled="!nuevoVehiculo.idMarca || modelosFiltrados.length === 0">
+                    <option v-for="modelo in modelosFiltrados" :key="modelo.id" :value="modelo.id">{{ modelo.modelo }}
+                    </option>
                 </select>
             </div>
             <div>
@@ -27,7 +28,6 @@
                 <input type="checkbox" id="sillaInfantil" v-model="nuevoVehiculo.sillaInfantil">
             </div>
             <button type="submit">Guardar</button>
-            <button type="button" @click="cancelar">Cancelar</button>
         </form>
     </div>
 </template>
@@ -35,14 +35,13 @@
 <script>
 export default {
     props: {
-        marcaSeleccionada: Boolean,
-        modeloSeleccionado: Boolean,
         marcas: Array,
         modelos: Array
     },
     data() {
         return {
             nuevoVehiculo: {
+                idMarca: '',
                 idModelo: '',
                 precioDia: null,
                 puertas: null,
@@ -52,23 +51,53 @@ export default {
     },
     methods: {
         agregarVehiculo() {
-            // Validar y enviar el nuevo vehículo al servidor
-            console.log('Nuevo vehículo:', this.nuevoVehiculo);
-            this.cancelar();
-        },
-        cancelar() {
-            this.nuevoVehiculo = {
-                idModelo: '',
-                precioDia: null,
-                puertas: null,
-                sillaInfantil: false
+            const URL = "http://localhost:3000/vehiculos/";
+            const init = {
+                method: 'POST',
+                body: JSON.stringify(this.nuevoVehiculo),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             };
-            this.$emit('cancelar');
+
+            fetch(URL, init)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('vehiculo agregado:', data);
+                    this.nuevoVehiculo = {
+                        idMarca: '',
+                        idModelo: '',
+                        precioDia: null,
+                        puertas: null,
+                        sillaInfantil: false
+                    };
+                })
+                .catch(error => {
+                    console.error('Error al agregar la marca:', error);
+                });
+        },
+        actualizarMarca() {
+            if (this.nuevoVehiculo.idMarca) {
+                this.modelosFiltrados = this.modelos.filter(modelo => modelo.idMarca === this.nuevoVehiculo.idMarca);
+            } else {
+                this.modelosFiltrados = [];
+            }
+        },
+        actualizarModelos() {
+                if (!this.nuevoVehiculo.idMarca) {
+                    this.nuevoVehiculo.idMarca = this.marcas[0].id;
+                }
+            }
+
+        },
+        computed: {
+            modelosFiltrados() {
+                return this.modelos.filter(modelo => modelo.idMarca === this.nuevoVehiculo.idMarca);
+            }
         }
-    }
-};
+    };
 </script>
-  
+
 <style scoped>
 .container {
     display: flex;
@@ -77,4 +106,3 @@ export default {
     text-align: center;
 }
 </style>
-  

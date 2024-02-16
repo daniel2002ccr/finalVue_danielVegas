@@ -15,11 +15,33 @@
                 <option v-for="modelo in modelosFiltrados" :key="modelo.id" :value="modelo.id">{{ modelo.modelo }}</option>
             </select>
         </div>
-        <div v-if="!marcaSeleccionada || modelosFiltrados.length > 0">
+        <div v-if="!marcaSeleccionada || !modeloSeleccionado">
+            <h3>Vehículos</h3>
+            <ul>
+                <li v-for="vehiculo in vehiculos" :key="vehiculo.id">
+                    <div>{{ obtenerNombreModelo(vehiculo.idModelo) }} - Precio alquiler: {{ vehiculo.precioDia }}€/día</div>
+                    <ul>
+                        <li v-for="cliente in clientesPorVehiculo(vehiculo.id)" :key="cliente.id">{{ cliente.nombre }}</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div v-else-if="!modeloSeleccionado">
+            <h3>Vehículos</h3>
+            <ul>
+                <li v-for="vehiculo in vehiculosFiltradosPorMarca" :key="vehiculo.id">
+                    <div>{{ obtenerNombreModelo(vehiculo.idModelo) }} - Precio alquiler: {{ vehiculo.precioDia }}€/día</div>
+                    <ul>
+                        <li v-for="cliente in clientesPorVehiculo(vehiculo.id)" :key="cliente.id">{{ cliente.nombre }}</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div v-else>
             <h3>Vehículos</h3>
             <ul>
                 <li v-for="vehiculo in vehiculosFiltrados" :key="vehiculo.id">
-                    <div>{{ vehiculo.modelo }} - Precio alquiler: {{ vehiculo.precioDia }}€/día</div>
+                    <div>{{ obtenerNombreModelo(vehiculo.idModelo) }} - Precio alquiler: {{ vehiculo.precioDia }}€/día</div>
                     <ul>
                         <li v-for="cliente in clientesPorVehiculo(vehiculo.id)" :key="cliente.id">{{ cliente.nombre }}</li>
                     </ul>
@@ -33,7 +55,7 @@
         </div>
     </div>
 </template>
-  
+
 <script>
 import NuevoVehiculo from './NuevoVehiculo.vue';
 
@@ -62,12 +84,26 @@ export default {
         modelosFiltrados() {
             return this.modelos.filter(modelo => modelo.idMarca === this.marcaSeleccionada);
         },
+        vehiculosFiltradosPorMarca() {
+        return this.vehiculos.filter(vehiculo => {
+            const modelo = this.modelos.find(m => m.id === vehiculo.idModelo);
+            return modelo && modelo.idMarca === this.marcaSeleccionada;
+        });
+    },
         vehiculosFiltrados() {
             if (!this.modeloSeleccionado) {
-                return this.vehiculos;
+                if (!this.marcaSeleccionada) {
+                    return this.vehiculos;
+                } else {
+                    return this.vehiculos.filter(vehiculo => {
+                        const modelo = this.modelos.find(m => m.id === vehiculo.idModelo);
+                        return modelo && modelo.idMarca === this.marcaSeleccionada;
+                    });
+                }
+            } else {
+                return this.vehiculos.filter(vehiculo => vehiculo.idModelo === this.modeloSeleccionado);
             }
-            return this.vehiculos.filter(vehiculo => vehiculo.idModelo === this.modeloSeleccionado);
-        }
+        },
     },
     methods: {
         obtenerMarcas() {
@@ -94,20 +130,54 @@ export default {
             fetch('http://localhost:3000/vehiculos')
                 .then(response => response.json())
                 .then(vehiculos => {
-                    this.modelos.forEach(modelo => {
-                        const vehiculo = vehiculos.find(v => v.idModelo === modelo.id);
-                        modelo.precioDia = vehiculo ? vehiculo.precioDia : 0;
-                    });
+                    this.vehiculos = vehiculos;
                 })
                 .catch(error => {
                     console.error('Error al cargar los vehículos:', error);
                 });
         },
         obtenerClientes() {
-            // Lógica para obtener los clientes
+            fetch('http://localhost:3000/clientes')
+                .then(response => response.json())
+                .then(clientes => {
+                    this.clientes = clientes;
+                })
+                .catch(error => {
+                    console.error('Error al cargar los vehículos:', error);
+                });
         },
         cargarModelos() {
-            // Lógica para cargar los modelos según la marca seleccionada
+            if (!this.marcaSeleccionada) {
+                fetch('http://localhost:3000/modelos')
+                    .then(response => response.json())
+                    .then(data => {
+                        this.modelos = data;
+                    })
+                    .catch(error => {
+                        console.error('Error al cargar los modelos:', error);
+                    });
+                this.modeloSeleccionado = '';
+            } else {
+                console.log(this.marcaSeleccionada);
+                fetch(`http://localhost:3000/modelos?idMarca=${this.marcaSeleccionada}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        this.modelos = data;
+                    })
+                    .catch(error => {
+                        console.error('Error al cargar los modelos:', error);
+                    });
+            }
+        },
+        obtenerVehiculosPorMarca(idMarca) {
+            fetch(`http://localhost:3000/vehiculos?idMarca=${idMarca}`)
+                .then(response => response.json())
+                .then(vehiculos => {
+                    this.vehiculos = vehiculos;
+                })
+                .catch(error => {
+                    console.error('Error al cargar los vehículos por marca:', error);
+                });
         },
         clientesPorVehiculo(idVehiculo) {
             return this.clientes.filter(cliente => cliente.alquileres.some(alquiler => alquiler.vehiculo === idVehiculo));
@@ -117,8 +187,12 @@ export default {
         },
         cancelarNuevoVehiculo() {
             this.mostrarFormularioNuevoVehiculo = false;
+        },
+        obtenerNombreModelo(idModelo) {
+            const modelo = this.modelos.find(m => m.id === idModelo);
+            return modelo ? modelo.modelo : 'Modelo Desconocido';
         }
     }
 };
 </script>
-  
+

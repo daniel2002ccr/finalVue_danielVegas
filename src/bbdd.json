@@ -40,6 +40,22 @@
       "precioDia": 98,
       "puertas": 4,
       "sillaInfantil": false
+    },
+    {
+      "idMarca": 1,
+      "idModelo": 1,
+      "precioDia": 33,
+      "puertas": 2,
+      "sillaInfantil": true,
+      "id": 2
+    },
+    {
+      "idMarca": 2,
+      "idModelo": 2,
+      "precioDia": 55,
+      "puertas": 2,
+      "sillaInfantil": false,
+      "id": 3
     }
   ],
   "clientes": [

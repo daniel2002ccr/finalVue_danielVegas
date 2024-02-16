@@ -1,38 +1,56 @@
 <template>
-    <div>
-      <h1>Vista de Nuevo Vehículo</h1>
-      <NuevoVehiculoComponente
-        :marcas="marcas"
-        :modelos="modelos"
-        :marcaSeleccionada="marcaSeleccionada"
-        :modeloSeleccionado="modeloSeleccionado"
-        @cancelar="mostrarListadoVehiculos"
-      />
-    </div>
-  </template>
+  <div class="container">
+    <h1>Vista de Nuevo Vehículo</h1>
+    <NuevoVehiculoComponent :marcas="marcas" :modelos="modelos" :marcaSeleccionada="marcaSeleccionada"
+      :modeloSeleccionado="modeloSeleccionado" @listado="mostrarListadoVehiculos" />
+  </div>
+</template>
   
-  <script>
-  import NuevoVehiculoComponente from '../components/NuevoVehiculoComponente';
-  
-  export default {
-    components: {
-      NuevoVehiculoComponente
+<script>
+import NuevoVehiculoComponent from '@/components/NuevoVehiculoComponent.vue';
+
+export default {
+  components: {
+    NuevoVehiculoComponent
+  },
+  data() {
+    return {
+      marcas: [],
+      modelos: [],
+      marcaSeleccionada: null,
+      modeloSeleccionado: null
+    };
+  },
+  mounted() {
+    this.obtenerDatosMarcas();
+    this.obtenerDatosModelos();
+  },
+
+  methods: {
+    obtenerDatosMarcas() {
+      fetch('http://localhost:3000/marcas')
+        .then(response => response.json())
+        .then(data => {
+          this.marcas = data;
+        })
+        .catch(error => {
+          console.error('Error al cargar las marcas:', error);
+        });
     },
-    data() {
-      return {
-        marcas: [],
-        modelos: [],
-        marcaSeleccionada: false,
-        modeloSeleccionado: false
-      };
+    obtenerDatosModelos() {
+      fetch('http://localhost:3000/modelos')
+        .then(response => response.json())
+        .then(data => {
+          this.modelos = data;
+        })
+        .catch(error => {
+          console.error('Error al cargar los modelos:', error);
+        });
     },
-    // Métodos y lógica para cargar marcas y modelos, gestionar la selección de marca y modelo, etc.
-    methods: {
-      // Método para mostrar el listado de vehículos cuando se cancela el formulario
-      mostrarListadoVehiculos() {
-        // Lógica para mostrar el listado de vehículos
-      }
+    mostrarListadoVehiculos() {
+      this.$router.push({ name: 'ListadoVehiculos' });
     }
-  };
-  </script>
+  }
+};
+</script>
   
