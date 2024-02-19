@@ -51,51 +51,47 @@ export default {
     },
     methods: {
         agregarVehiculo() {
-            const URL = "http://localhost:3000/vehiculos/";
-            const init = {
-                method: 'POST',
-                body: JSON.stringify(this.nuevoVehiculo),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            };
 
-            fetch(URL, init)
-                .then(response => response.json())
-                .then(data => {
-                    console.log('vehiculo agregado:', data);
-                    this.nuevoVehiculo = {
-                        idMarca: '',
-                        idModelo: '',
-                        precioDia: null,
-                        puertas: null,
-                        sillaInfantil: false
-                    };
-                })
-                .catch(error => {
-                    console.error('Error al agregar la marca:', error);
-                });
-        },
-        actualizarMarca() {
-            if (this.nuevoVehiculo.idMarca) {
-                this.modelosFiltrados = this.modelos.filter(modelo => modelo.idMarca === this.nuevoVehiculo.idMarca);
-            } else {
-                this.modelosFiltrados = [];
-            }
-        },
-        actualizarModelos() {
-                if (!this.nuevoVehiculo.idMarca) {
-                    this.nuevoVehiculo.idMarca = this.marcas[0].id;
-                }
-            }
+         const datosVehiculo = {
+            idModelo: this.nuevoVehiculo.idModelo,
+            precioDia: this.nuevoVehiculo.precioDia,
+            puertas: this.nuevoVehiculo.puertas,
+            sillaInfantil: this.nuevoVehiculo.sillaInfantil
+        };
 
-        },
-        computed: {
-            modelosFiltrados() {
-                return this.modelos.filter(modelo => modelo.idMarca === this.nuevoVehiculo.idMarca);
+
+        const URL = "http://localhost:3000/vehiculos/";
+        const init = {
+            method: 'POST',
+            body: JSON.stringify(datosVehiculo),
+            headers: {
+                'Content-Type': 'application/json'
             }
+        };
+
+        fetch(URL, init)
+            .then(response => response.json())
+            .then(data => {
+                console.log('vehiculo agregado:', data);
+                this.nuevoVehiculo = {
+                    idMarca: '',
+                    idModelo: '',
+                    precioDia: null,
+                    puertas: null,
+                    sillaInfantil: false
+                };
+            })
+            .catch(error => {
+                console.error('Error al agregar el vehículo:', error);
+            });
         }
-    };
+    },
+    computed: {
+        modelosFiltrados() {
+            return this.modelos.filter(modelo => modelo.idMarca === this.nuevoVehiculo.idMarca);
+        }
+    }
+};
 </script>
 
 <style scoped>

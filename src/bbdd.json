@@ -11,6 +11,12 @@
       "origen": "Italia",
       "anioFundacion": 1919,
       "id": 2
+    },
+    {
+      "nombre": "Aston Martin",
+      "origen": "Reino Unido",
+      "anioFundacion": 1899,
+      "id": 3
     }
   ],
   "modelos": [
@@ -31,6 +37,18 @@
       "modelo": "Modelou",
       "extraPorModelo": 2,
       "id": 3
+    },
+    {
+      "idMarca": 1,
+      "modelo": "Funciona",
+      "extraPorModelo": 0,
+      "id": 6
+    },
+    {
+      "idMarca": 3,
+      "modelo": "A7",
+      "extraPorModelo": 7,
+      "id": 7
     }
   ],
   "vehiculos": [
@@ -56,6 +74,51 @@
       "puertas": 2,
       "sillaInfantil": false,
       "id": 3
+    },
+    {
+      "idMarca": 1,
+      "idModelo": 3,
+      "precioDia": 33,
+      "puertas": 4,
+      "sillaInfantil": true,
+      "id": 4
+    },
+    {
+      "idModelo": 1,
+      "precioDia": 33,
+      "puertas": 2,
+      "sillaInfantil": true,
+      "idMarca": 1,
+      "id": 5
+    },
+    {
+      "idMarca": 1,
+      "idModelo": 1,
+      "precioDia": 21,
+      "puertas": 2,
+      "sillaInfantil": true,
+      "id": 6
+    },
+    {
+      "idModelo": 2,
+      "precioDia": 500,
+      "puertas": 2,
+      "sillaInfantil": false,
+      "id": 7
+    },
+    {
+      "idModelo": 6,
+      "precioDia": 14,
+      "puertas": 33,
+      "sillaInfantil": true,
+      "id": 8
+    },
+    {
+      "idModelo": 7,
+      "precioDia": 45,
+      "puertas": 2,
+      "sillaInfantil": false,
+      "id": 9
     }
   ],
   "clientes": [
@@ -68,6 +131,26 @@
           "vehiculo": 1,
           "numDias": 4,
           "fechaInic": "12/11/2022"
+        },
+        {
+          "vehiculo": 4,
+          "numDias": 5,
+          "fechaInic": "06/02/2024"
+        },
+        {
+          "vehiculo": 4,
+          "numDias": 2,
+          "fechaInic": "19/02/2024"
+        },
+        {
+          "vehiculo": 2,
+          "numDias": 7,
+          "fechaInic": "06/02/2024"
+        },
+        {
+          "vehiculo": 3,
+          "numDias": 1,
+          "fechaInic": "19/02/2024"
         }
       ]
     }

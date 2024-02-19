@@ -20,7 +20,7 @@
             <select id="vehiculo" v-model="vehiculoSeleccionado" :disabled="!modeloSeleccionado">
                 <option value="">Selecciona un vehículo</option>
                 <option v-for="vehiculo in vehiculosDisponibles" :key="vehiculo.id" :value="vehiculo.id">
-                    {{ vehiculo.modelo }} - {{ vehiculo.precioDia }}€/día
+                    {{ vehiculo.idModelo }} - {{ vehiculo.precioDia }}€/día
                 </option>
             </select>
         </div>
@@ -28,7 +28,7 @@
             <label for="cliente">Cliente:</label>
             <select id="cliente" v-model="clienteSeleccionado" :disabled="!vehiculoSeleccionado">
                 <option value="">Selecciona un cliente</option>
-                <option v-for="cliente in clientes" :key="cliente.id" :value="cliente.id">
+                <option v-for="cliente in clientes" :key="cliente.id" :value="cliente">
                     {{ cliente.nombre }} - {{ cliente.dni }}
                 </option>
             </select>
@@ -49,9 +49,8 @@
             <h3>Alquiler Realizado</h3>
             <p>Marca: {{ marcaSeleccionada }}</p>
             <p>Modelo: {{ modeloSeleccionado }}</p>
-            <p>Cliente: {{ clienteSeleccionado }}</p>
-            <p>Duración del alquiler: {{ duracionAlquiler }} días</p>
-            <p>Fecha de inicio: {{ fechaInicioAlquiler }}</p>
+            <p>Cliente: {{ clienteSeleccionado.nombre }}</p>
+            <p>DNI: {{ clienteSeleccionado.dni }}</p>
             <p>Precio Total: {{ precioTotal }}€</p>
         </div>
     </div>
@@ -121,14 +120,6 @@ export default {
         },
         cargarModelos() {
             if (!this.marcaSeleccionada) {
-                this.modelos = [];
-                this.modeloSeleccionado = '';
-                this.vehiculoSeleccionado = '';
-                this.clienteSeleccionado = '';
-                this.duracionAlquiler = null;
-                this.fechaInicioAlquiler = '';
-                this.precioTotal = 0;
-                this.alquilerRealizado = false;
                 return;
             }
             fetch(`http://localhost:3000/modelos?marca=${this.marcaSeleccionada}`)
@@ -148,32 +139,42 @@ export default {
                 });
         },
         registrarAlquiler() {
-            const datosAlquiler = {
+            const nuevoAlquiler = {
                 vehiculo: this.vehiculoSeleccionado,
                 numDias: this.duracionAlquiler,
-                fechaInic: this.fechaInicioAlquiler
+                fechaInic: this.fechaInicioAlquiler.split('-').reverse().join('/')
             };
-            fetch('http://localhost:3000/alquileres', {
-                method: 'POST',
+
+            this.clienteSeleccionado.alquileres.push(nuevoAlquiler);
+
+            fetch(`http://localhost:3000/clientes/${this.clienteSeleccionado.id}`, {
+                method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(datosAlquiler)
+                body: JSON.stringify({ alquileres: this.clienteSeleccionado.alquileres })
             })
                 .then(response => response.json())
                 .then(data => {
                     this.alquilerRealizado = true;
                     const vehiculoSeleccionado = this.vehiculos.find(vehiculo => vehiculo.id === this.vehiculoSeleccionado);
+                    const modeloSeleccionado = this.modelos.find(modelo => modelo.id === vehiculoSeleccionado.idModelo);
+
+                    // Obteniendo la marca del modelo seleccionado
+                    const marcaSeleccionada = this.marcas.find(marca => marca.id === modeloSeleccionado.idMarca);
+
+                    // Actualizando la marca seleccionada con su nombre
+                    this.marcaSeleccionada = marcaSeleccionada ? marcaSeleccionada.nombre : '';
+
+                    this.modeloSeleccionado = modeloSeleccionado ? modeloSeleccionado.modelo : '';
                     this.precioTotal = vehiculoSeleccionado.precioDia * this.duracionAlquiler;
                 })
                 .catch(error => {
                     console.error('Error al registrar el alquiler:', error);
                 });
         }
-
     }
 };
 </script>
   
 <style scoped></style>
-  
