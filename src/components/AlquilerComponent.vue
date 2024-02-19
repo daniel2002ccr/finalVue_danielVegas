@@ -168,6 +168,7 @@ export default {
 
                     this.modeloSeleccionado = modeloSeleccionado ? modeloSeleccionado.modelo : '';
                     this.precioTotal = vehiculoSeleccionado.precioDia * this.duracionAlquiler;
+                    
                 })
                 .catch(error => {
                     console.error('Error al registrar el alquiler:', error);
