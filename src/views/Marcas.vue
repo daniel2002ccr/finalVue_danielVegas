@@ -103,10 +103,33 @@ export default {
 };
 </script>
 <style scoped>
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+ul {
+  list-style: none;
+  padding: 0;
 }
+
+li {
+  margin-bottom: 10px;
+  cursor: pointer;
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+li:hover {
+  background-color: #ccc;
+}
+
+h2, h3 {
+  margin-bottom: 20px;
+  font-size: 30px;
+}
+
+h3 {
+  color: #333;
+}
+
 </style>

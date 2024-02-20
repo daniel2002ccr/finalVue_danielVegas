@@ -14,12 +14,17 @@
 </template>
 
 <style>
+
+body{
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
 nav {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  background-color: rgb(252, 245, 245);
+  background-color: rgb(222, 226, 219);
   width: 9%;
   float: left;
 }
@@ -28,7 +33,9 @@ nav a {
   padding: 20px;
   text-decoration: none;
   color: green;
+  font-weight: bolder;
 }
+
 .container {
   display: flex;
   flex-direction: column;

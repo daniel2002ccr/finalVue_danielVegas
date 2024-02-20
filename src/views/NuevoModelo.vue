@@ -1,27 +1,27 @@
 <template>
   <div class="container">
-    <h2>Dar de alta nuevo modelo</h2>
-    <form @submit.prevent="agregarModelo">
-      <div>
-        <label for="marca">Marca:</label>
-        <select id="marca" v-model="nuevoModelo.idMarca" required>
+    <h2 class="title">Dar de alta nuevo modelo</h2>
+    <form @submit.prevent="agregarModelo" class="form">
+      <div class="form-group">
+        <label for="marca" class="label">Marca:</label>
+        <select id="marca" v-model="nuevoModelo.idMarca" required class="select">
           <option value="">Selecciona una marca</option>
           <option v-for="marca in marcas" :value="marca.id">{{ marca.nombre }}</option>
         </select>
       </div>
-      <div>
-        <label for="modelo">Modelo:</label>
-        <input type="text" id="modelo" v-model="nuevoModelo.modelo" required>
+      <div class="form-group">
+        <label for="modelo" class="label">Modelo:</label>
+        <input type="text" id="modelo" v-model="nuevoModelo.modelo" required class="input">
       </div>
-      <div>
-        <label for="extra">Precio Extra:</label>
-        <input type="number" id="extra" v-model.number="nuevoModelo.extraPorModelo" min="0">
+      <div class="form-group">
+        <label for="extra" class="label">Precio Extra:</label>
+        <input type="number" id="extra" v-model.number="nuevoModelo.extraPorModelo" min="0" class="input">
       </div>
-      <button type="submit">Guardar</button>
+      <button type="submit" class="button">Guardar</button>
     </form>
   </div>
 </template>
-  
+
 <script>
 export default {
   data() {
@@ -79,11 +79,45 @@ export default {
   }
 };
 </script>
+
 <style scoped>
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+.form {
+  width: 300px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.input{
+  width: 94%; 
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.select {
+  width: 100%; 
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #0056b3;
 }
 </style>

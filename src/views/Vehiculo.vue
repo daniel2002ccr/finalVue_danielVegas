@@ -1,37 +1,37 @@
 <template>
-    <div class="container">
-      <h2>Vehículos</h2>
-      <div>
-        <label for="marca">Marca:</label>
-        <select id="marca" v-model="marcaSeleccionada" @change="cargarModelos">
-          <option value="">Selecciona una marca</option>
-          <option v-for="marca in marcas" :key="marca.id" :value="marca.id">{{ marca.nombre }}</option>
-        </select>
-      </div>
-      <div>
-        <label for="modelo">Modelo:</label>
-        <select id="modelo" v-model="modeloSeleccionado">
-          <option value="">Selecciona un modelo</option>
-          <option v-for="modelo in modelosFiltrados" :key="modelo.id" :value="modelo.id">{{ modelo.modelo }}</option>
-        </select>
-      </div>
-      <div>
-        <h3>Vehículos</h3>
-        <ul>
-          <li v-for="vehiculo in vehiculosFiltrados" :key="vehiculo.id">
-            <div>{{ obtenerNombreModelo(vehiculo.idModelo) }} - Precio alquiler: {{ vehiculo.precioDia }}€/día</div>
-            <ul>
-              <li v-for="cliente in clientesPorVehiculo(vehiculo.id)" :key="cliente.id">{{ cliente.nombre }}</li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-      <button @click="mostrarNuevoVehiculo">Nuevo Vehículo</button>
-      <div v-if="mostrarFormularioNuevoVehiculo">
-        <NuevoVehiculo :marcaSeleccionada="marcaSeleccionada" :modeloSeleccionado="modeloSeleccionado" @cancelar="cancelarNuevoVehiculo" />
-      </div>
+  <div class="container">
+    <h2>Vehículos</h2>
+    <div>
+      <label for="marca">Marca:</label>
+      <select id="marca" v-model="marcaSeleccionada" @change="cargarModelos" class="select">
+        <option value="">Selecciona una marca</option>
+        <option v-for="marca in marcas" :key="marca.id" :value="marca.id">{{ marca.nombre }}</option>
+      </select>
     </div>
-  </template>
+    <div>
+      <label for="modelo">Modelo:</label>
+      <select id="modelo" v-model="modeloSeleccionado" class="select">
+        <option value="">Selecciona un modelo</option>
+        <option v-for="modelo in modelosFiltrados" :key="modelo.id" :value="modelo.id">{{ modelo.modelo }}</option>
+      </select>
+    </div>
+    <div>
+      <h3>Vehículos</h3>
+      <ul>
+        <li v-for="vehiculo in vehiculosFiltrados" :key="vehiculo.id" class="vehiculo">
+          <div class="modelo-info">{{ obtenerNombreModelo(vehiculo.idModelo) }} - Precio alquiler: {{ vehiculo.precioDia }}€/día</div>
+          <ul>
+            <li v-for="cliente in clientesPorVehiculo(vehiculo.id)" :key="cliente.id">{{ cliente.nombre }}</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <button @click="mostrarNuevoVehiculo" class="button">Nuevo Vehículo</button>
+    <div v-if="mostrarFormularioNuevoVehiculo">
+      <NuevoVehiculo :marcaSeleccionada="marcaSeleccionada" :modeloSeleccionado="modeloSeleccionado" @cancelar="cancelarNuevoVehiculo" />
+    </div>
+  </div>
+</template>
   
   <script>
   import NuevoVehiculo from './NuevoVehiculo.vue';
@@ -158,4 +158,37 @@
     }
   };
   </script>
+  <style scoped>
+.select {
+  width: 100%; /* Ajustar el ancho del select al 100% */
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 10px; /* Agregar un margen inferior para separar los elementos */
+}
+
+.button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 10px; /* Agregar margen inferior para separar los elementos */
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+.vehiculo {
+  margin-bottom: 20px; 
+}
+
+.modelo-info {
+  font-weight: bold;
+  margin-bottom: 5px; 
+}
+</style>
   

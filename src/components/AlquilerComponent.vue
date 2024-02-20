@@ -1,52 +1,54 @@
 <template>
     <div class="container">
-        <h2>Alquiler de Vehículos</h2>
-        <div>
-            <label for="marca">Marca:</label>
-            <select id="marca" v-model="marcaSeleccionada" @change="cargarModelos">
+        <h2 class="title">Alquiler de Vehículos</h2>
+        <div class="form-group">
+            <label for="marca" class="label">Marca:</label>
+            <select id="marca" v-model="marcaSeleccionada" @change="cargarModelos" class="select">
                 <option value="">Selecciona una marca</option>
                 <option v-for="marca in marcas" :key="marca.id" :value="marca.id">{{ marca.nombre }}</option>
             </select>
         </div>
-        <div>
-            <label for="modelo">Modelo:</label>
-            <select id="modelo" v-model="modeloSeleccionado" :disabled="!marcaSeleccionada">
+        <div class="form-group">
+            <label for="modelo" class="label">Modelo:</label>
+            <select id="modelo" v-model="modeloSeleccionado" :disabled="!marcaSeleccionada" class="select">
                 <option value="">Selecciona un modelo</option>
                 <option v-for="modelo in modelosFiltrados" :key="modelo.id" :value="modelo.id">{{ modelo.modelo }}</option>
             </select>
         </div>
-        <div>
-            <label for="vehiculo">Vehículo:</label>
-            <select id="vehiculo" v-model="vehiculoSeleccionado" :disabled="!modeloSeleccionado">
+        <div class="form-group">
+            <label for="vehiculo" class="label">Vehículo:</label>
+            <select id="vehiculo" v-model="vehiculoSeleccionado" :disabled="!modeloSeleccionado" class="select">
                 <option value="">Selecciona un vehículo</option>
                 <option v-for="vehiculo in vehiculosDisponibles" :key="vehiculo.id" :value="vehiculo.id">
-                    {{ vehiculo.idModelo }} - {{ vehiculo.precioDia }}€/día
+                    {{ obtenerModelo(vehiculo.idModelo) }} - {{ vehiculo.precioDia }}€/día
                 </option>
             </select>
         </div>
-        <div>
-            <label for="cliente">Cliente:</label>
-            <select id="cliente" v-model="clienteSeleccionado" :disabled="!vehiculoSeleccionado">
+        <div class="form-group">
+            <label for="cliente" class="label">Cliente:</label>
+            <select id="cliente" v-model="clienteSeleccionado" :disabled="!vehiculoSeleccionado" class="select">
                 <option value="">Selecciona un cliente</option>
                 <option v-for="cliente in clientes" :key="cliente.id" :value="cliente">
                     {{ cliente.nombre }} - {{ cliente.dni }}
                 </option>
             </select>
         </div>
-        <div>
-            <label for="duracion">Duración del alquiler (días):</label>
-            <input type="number" id="duracion" v-model.number="duracionAlquiler" :disabled="!clienteSeleccionado">
+        <div class="form-group">
+            <label for="duracion" class="label">Duración del alquiler (días):</label>
+            <input type="number" id="duracion" v-model.number="duracionAlquiler" :disabled="!clienteSeleccionado"
+                class="input">
         </div>
-        <div>
-            <label for="fechaInicio">Fecha de inicio del alquiler:</label>
-            <input type="date" id="fechaInicio" v-model="fechaInicioAlquiler" :disabled="!clienteSeleccionado">
+        <div class="form-group">
+            <label for="fechaInicio" class="label">Fecha de inicio del alquiler:</label>
+            <input type="date" id="fechaInicio" v-model="fechaInicioAlquiler" :disabled="!clienteSeleccionado"
+                class="input">
         </div>
-        <div>
-            <button @click="registrarAlquiler"
-                :disabled="!clienteSeleccionado || !duracionAlquiler || !fechaInicioAlquiler">Alquilar</button>
+        <div class="form-group">
+            <button @click="registrarAlquiler" :disabled="!clienteSeleccionado || !duracionAlquiler || !fechaInicioAlquiler"
+                class="button">Alquilar</button>
         </div>
-        <div v-if="alquilerRealizado">
-            <h3>Alquiler Realizado</h3>
+        <div v-if="alquilerRealizado" class="info-section">
+            <h3 class="subtitle">Alquiler Realizado</h3>
             <p>Marca: {{ marcaSeleccionada }}</p>
             <p>Modelo: {{ modeloSeleccionado }}</p>
             <p>Cliente: {{ clienteSeleccionado.nombre }}</p>
@@ -88,6 +90,10 @@ export default {
         }
     },
     methods: {
+        obtenerModelo(idModelo) {
+            const modelo = this.modelos.find(modelo => modelo.id === idModelo);
+            return modelo ? modelo.modelo : 'Modelo Desconocido';
+        },
         obtenerMarcas() {
             fetch('http://localhost:3000/marcas')
                 .then(response => response.json())
@@ -160,15 +166,15 @@ export default {
                     const vehiculoSeleccionado = this.vehiculos.find(vehiculo => vehiculo.id === this.vehiculoSeleccionado);
                     const modeloSeleccionado = this.modelos.find(modelo => modelo.id === vehiculoSeleccionado.idModelo);
 
-                    // Obteniendo la marca del modelo seleccionado
+
                     const marcaSeleccionada = this.marcas.find(marca => marca.id === modeloSeleccionado.idMarca);
 
-                    // Actualizando la marca seleccionada con su nombre
+
                     this.marcaSeleccionada = marcaSeleccionada ? marcaSeleccionada.nombre : '';
 
                     this.modeloSeleccionado = modeloSeleccionado ? modeloSeleccionado.modelo : '';
                     this.precioTotal = vehiculoSeleccionado.precioDia * this.duracionAlquiler;
-                    
+
                 })
                 .catch(error => {
                     console.error('Error al registrar el alquiler:', error);
@@ -178,4 +184,54 @@ export default {
 };
 </script>
   
-<style scoped></style>
+<style scoped>
+.title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.label {
+    font-weight: bold;
+}
+
+.select,
+.input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+
+}
+
+.button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+
+.info-section {
+    margin-top: 20px;
+    border-top: 1px solid #ccc;
+    padding-top: 20px;
+}
+
+.subtitle {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+</style>

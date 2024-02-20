@@ -59,13 +59,45 @@
   };
   </script>
   <style scoped>
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-.boton{
-  margin-top: 5px;
-}
+
+  .form-marca {
+    width: 80%;
+    max-width: 400px;
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  label {
+    font-weight: bold;
+  }
+  
+  input[type="text"],
+  input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  button.boton {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button.boton:hover {
+    background-color: #0056b3;
+  }
 </style>

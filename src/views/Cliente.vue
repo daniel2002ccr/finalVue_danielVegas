@@ -16,13 +16,9 @@
         <h3>Vehículos Alquilados</h3>
         <ul>
           <li v-for="vehiculo in clienteSeleccionado.vehiculosAlquilados" :key="vehiculo.id">
-            {{ vehiculo.marca }} - {{ vehiculo.modelo }} - Precio: {{ vehiculo.precio }}
+            {{ vehiculo.modelo }} - Precio: {{ vehiculo.precioTotal }}€.
           </li>
         </ul>
-        <div>
-          <button @click="modificarCliente" :disabled="!clienteSeleccionado">Modificar</button>
-          <button @click="eliminarCliente" :disabled="!clienteSeleccionado">Eliminar</button>
-        </div>
       </div>
     </div>
     <div class="formulario-cliente">
@@ -32,15 +28,15 @@
         <input type="text" id="nombre" v-model="nuevoCliente.nombre" required>
         <label for="dni">DNI:</label>
         <input type="text" id="dni" v-model="nuevoCliente.dni" required>
-        <button type="submit">Alta</button>
+        <button type="submit" class="alta-btn" :disabled="!nuevoCliente.nombre || !nuevoCliente.dni">Alta</button>
       </form>
       <form @submit.prevent="modificarCliente" v-if="clienteSeleccionado">
         <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" v-model="clienteSeleccionado.nombre" required>
+        <input type="text" id="nombre" v-model="clienteTemporal.nombre" required>
         <label for="dni">DNI:</label>
-        <input type="text" id="dni" v-model="clienteSeleccionado.dni" required>
-        <button type="submit">Modificar</button>
-        <button type="button" @click="eliminarCliente">Eliminar</button>
+        <input type="text" id="dni" v-model="clienteTemporal.dni" required>
+        <button type="submit" class="modificar-btn">Modificar</button>
+        <button type="button" @click="eliminarCliente" class="eliminar-btn">Eliminar</button>
       </form>
     </div>
   </div>
@@ -52,6 +48,9 @@ export default {
     return {
       clientes: [],
       clienteSeleccionado: null,
+      clienteTemporal: null,
+      vehiculos: [],
+      marcas: [],
       nuevoCliente: {
         nombre: '',
         dni: '',
@@ -61,11 +60,30 @@ export default {
   },
   created() {
     this.obtenerClientes();
+    this.obtenerVehiculos();
+    this.obtenerModelos();
   },
   methods: {
     mostrarDetallesCliente(cliente) {
-      this.clienteSeleccionado = cliente;
+      this.clienteSeleccionado = { ...cliente };
+      this.clienteTemporal = { ...cliente };
+      this.clienteSeleccionado.vehiculosAlquilados = [];
+
+      cliente.alquileres.forEach(alquiler => {
+        const vehiculoAlquilado = this.vehiculos.find(vehiculo => vehiculo.id === alquiler.vehiculo);
+        if (vehiculoAlquilado) {
+          const modeloSeleccionado = this.modelos.find(modelo => modelo.id === vehiculoAlquilado.idModelo);
+          if (modeloSeleccionado) {
+            vehiculoAlquilado.modelo = modeloSeleccionado.modelo;
+            const duracionAlquiler = alquiler.numDias;
+            const precioTotal = vehiculoAlquilado.precioDia * duracionAlquiler;
+            vehiculoAlquilado.precioTotal = precioTotal;
+            this.clienteSeleccionado.vehiculosAlquilados.push(vehiculoAlquilado);
+          }
+        }
+      });
     },
+
     obtenerClientes() {
       fetch('http://localhost:3000/clientes')
         .then(response => response.json())
@@ -74,6 +92,26 @@ export default {
         })
         .catch(error => {
           console.error('Error al cargar los clientes:', error);
+        });
+    },
+    obtenerVehiculos() {
+      fetch('http://localhost:3000/vehiculos')
+        .then(response => response.json())
+        .then(data => {
+          this.vehiculos = data;
+        })
+        .catch(error => {
+          console.error('Error al cargar los vehículos:', error);
+        });
+    },
+    obtenerModelos() {
+      fetch('http://localhost:3000/modelos')
+        .then(response => response.json())
+        .then(data => {
+          this.modelos = data;
+        })
+        .catch(error => {
+          console.error('Error al cargar las marcas:', error);
         });
     },
     guardarCliente() {
@@ -100,7 +138,7 @@ export default {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(this.clienteSeleccionado)
+        body: JSON.stringify(this.clienteTemporal)
       })
         .then(response => response.json())
         .then(data => {
@@ -133,15 +171,27 @@ export default {
   }
 };
 </script>
-
 <style scoped>
 .container {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr) auto;
+  gap: 20px;
+  align-items: start;
 }
-.clientes-lista,
-.detalle-cliente,
+
+.clientes-lista {
+  grid-column: 1;
+}
+
+ul {
+  list-style: none;
+}
+
+.detalle-cliente {
+  grid-column: 2;
+}
+
 .formulario-cliente {
-  width: 30%;
+  grid-column: 1 / -1;
 }
 </style>
