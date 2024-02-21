@@ -16,7 +16,7 @@
         <h3>Vehículos Alquilados</h3>
         <ul>
           <li v-for="vehiculo in clienteSeleccionado.vehiculosAlquilados" :key="vehiculo.id">
-            {{ vehiculo.modelo }} - Precio: {{ vehiculo.precioTotal }}€.
+            {{ vehiculo.marca }} - {{ vehiculo.modelo }} - Precio: {{ vehiculo.precioTotal }}€.
           </li>
         </ul>
       </div>
@@ -51,6 +51,7 @@ export default {
       clienteTemporal: null,
       vehiculos: [],
       marcas: [],
+      modelos: [],
       nuevoCliente: {
         nombre: '',
         dni: '',
@@ -62,6 +63,7 @@ export default {
     this.obtenerClientes();
     this.obtenerVehiculos();
     this.obtenerModelos();
+    this.obtenerMarcas();
   },
   methods: {
     mostrarDetallesCliente(cliente) {
@@ -75,6 +77,8 @@ export default {
           const modeloSeleccionado = this.modelos.find(modelo => modelo.id === vehiculoAlquilado.idModelo);
           if (modeloSeleccionado) {
             vehiculoAlquilado.modelo = modeloSeleccionado.modelo;
+            const marcaSeleccionada = this.marcas.find(marca => marca.id === modeloSeleccionado.idMarca);
+            vehiculoAlquilado.marca = marcaSeleccionada ? marcaSeleccionada.nombre : '';
             const duracionAlquiler = alquiler.numDias;
             const precioTotal = vehiculoAlquilado.precioDia * duracionAlquiler;
             vehiculoAlquilado.precioTotal = precioTotal;
@@ -91,7 +95,7 @@ export default {
           this.clientes = data;
         })
         .catch(error => {
-          console.error('Error al cargar los clientes:', error);
+ 
         });
     },
     obtenerVehiculos() {
@@ -101,7 +105,7 @@ export default {
           this.vehiculos = data;
         })
         .catch(error => {
-          console.error('Error al cargar los vehículos:', error);
+
         });
     },
     obtenerModelos() {
@@ -111,7 +115,17 @@ export default {
           this.modelos = data;
         })
         .catch(error => {
-          console.error('Error al cargar las marcas:', error);
+
+        });
+    },
+    obtenerMarcas() {
+      fetch('http://localhost:3000/marcas')
+        .then(response => response.json())
+        .then(data => {
+          this.marcas = data;
+        })
+        .catch(error => {
+  
         });
     },
     guardarCliente() {
@@ -124,12 +138,11 @@ export default {
       })
         .then(response => response.json())
         .then(data => {
-          console.log('Cliente guardado:', data);
           this.obtenerClientes();
           this.limpiarFormulario();
         })
         .catch(error => {
-          console.error('Error al guardar el cliente:', error);
+          
         });
     },
     modificarCliente() {
@@ -142,12 +155,11 @@ export default {
       })
         .then(response => response.json())
         .then(data => {
-          console.log('Cliente modificado:', data);
           this.obtenerClientes();
           this.clienteSeleccionado = null;
         })
         .catch(error => {
-          console.error('Error al modificar el cliente:', error);
+          
         });
     },
     eliminarCliente() {
@@ -156,12 +168,11 @@ export default {
       })
         .then(response => response.json())
         .then(data => {
-          console.log('Cliente eliminado:', data);
           this.obtenerClientes();
           this.clienteSeleccionado = null;
         })
         .catch(error => {
-          console.error('Error al eliminar el cliente:', error);
+          
         });
     },
     limpiarFormulario() {
@@ -171,6 +182,7 @@ export default {
   }
 };
 </script>
+
 <style scoped>
 .container {
   display: grid;

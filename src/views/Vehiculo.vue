@@ -10,8 +10,8 @@
     </div>
     <div>
       <label for="modelo">Modelo:</label>
-      <select id="modelo" v-model="modeloSeleccionado" class="select">
-        <option value="">Selecciona un modelo</option>
+      <select id="modelo" v-model="modeloSeleccionado" :disabled="!marcaSeleccionada" class="select">
+        <option value="" disabled>Selecciona un modelo</option>
         <option v-for="modelo in modelosFiltrados" :key="modelo.id" :value="modelo.id">{{ modelo.modelo }}</option>
       </select>
     </div>
@@ -160,11 +160,11 @@
   </script>
   <style scoped>
 .select {
-  width: 100%; /* Ajustar el ancho del select al 100% */
+  width: 100%;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  margin-bottom: 10px; /* Agregar un margen inferior para separar los elementos */
+  margin-bottom: 10px; 
 }
 
 .button {
@@ -175,7 +175,7 @@
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-bottom: 10px; /* Agregar margen inferior para separar los elementos */
+  margin-bottom: 10px; 
 }
 
 .button:hover {

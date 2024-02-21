@@ -69,7 +69,6 @@
         fetch(URL, init)
           .then(response => response.json())
           .then(data => {
-            console.log('vehiculo agregado:', data);
             this.nuevoVehiculo = {
               idMarca: '',
               idModelo: '',
@@ -79,7 +78,7 @@
             };
           })
           .catch(error => {
-            console.error('Error al agregar el vehículo:', error);
+            
           });
       }
     },
@@ -116,7 +115,7 @@
   }
   
   .input {
-    width: 100%;
+    width: 95%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;

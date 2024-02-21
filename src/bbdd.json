@@ -11,6 +11,18 @@
       "origen": "Italia",
       "anioFundacion": 1910,
       "id": 2
+    },
+    {
+      "nombre": "dadse",
+      "origen": "sdada",
+      "anioFundacion": 131,
+      "id": 3
+    },
+    {
+      "nombre": "miau",
+      "origen": "p",
+      "anioFundacion": 1,
+      "id": 4
     }
   ],
   "modelos": [
@@ -31,6 +43,24 @@
       "modelo": "Le Ferrari",
       "extraPorModelo": 2,
       "id": 3
+    },
+    {
+      "idMarca": 2,
+      "modelo": "AYIYIYI",
+      "extraPorModelo": 6,
+      "id": 4
+    },
+    {
+      "idMarca": 3,
+      "modelo": "ad",
+      "extraPorModelo": 4,
+      "id": 5
+    },
+    {
+      "idMarca": 4,
+      "modelo": "Modelou",
+      "extraPorModelo": 200,
+      "id": 6
     }
   ],
   "vehiculos": [
@@ -42,16 +72,16 @@
       "sillaInfantil": false
     },
     {
-      "idModelo": 2,
-      "precioDia": 4,
-      "puertas": 2,
-      "sillaInfantil": false,
+      "idModelo": 5,
+      "precioDia": 6,
+      "puertas": 5,
+      "sillaInfantil": true,
       "id": 2
     },
     {
-      "idModelo": 3,
-      "precioDia": 8,
-      "puertas": 2,
+      "idModelo": 6,
+      "precioDia": 9,
+      "puertas": 9,
       "sillaInfantil": true,
       "id": 3
     }
@@ -68,9 +98,29 @@
           "fechaInic": "12/11/2022"
         },
         {
-          "vehiculo": 2,
-          "numDias": 4,
-          "fechaInic": "07/02/2024"
+          "vehiculo": 1,
+          "numDias": 3,
+          "fechaInic": "15/02/2024"
+        },
+        {
+          "vehiculo": 3,
+          "numDias": 1,
+          "fechaInic": "21/02/2024"
+        },
+        {
+          "vehiculo": 1,
+          "numDias": 2,
+          "fechaInic": "01/02/2024"
+        },
+        {
+          "vehiculo": 1,
+          "numDias": 1,
+          "fechaInic": "01/02/2024"
+        },
+        {
+          "vehiculo": 3,
+          "numDias": 7,
+          "fechaInic": "21/02/2024"
         }
       ]
     }

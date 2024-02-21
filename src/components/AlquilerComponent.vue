@@ -16,36 +16,41 @@
             </select>
         </div>
         <div class="form-group">
-            <label for="vehiculo" class="label">Vehículo:</label>
-            <select id="vehiculo" v-model="vehiculoSeleccionado" :disabled="!modeloSeleccionado" class="select">
-                <option value="">Selecciona un vehículo</option>
-                <option v-for="vehiculo in vehiculosDisponibles" :key="vehiculo.id" :value="vehiculo.id">
-                    {{ obtenerModelo(vehiculo.idModelo) }} - {{ vehiculo.precioDia }}€/día
-                </option>
-            </select>
+            <button :disabled="!marcaSeleccionada || !modeloSeleccionado" @click="mostrarVehiculos" class="button">Mostrar Vehículos</button>
         </div>
-        <div class="form-group">
-            <label for="cliente" class="label">Cliente:</label>
-            <select id="cliente" v-model="clienteSeleccionado" :disabled="!vehiculoSeleccionado" class="select">
-                <option value="">Selecciona un cliente</option>
-                <option v-for="cliente in clientes" :key="cliente.id" :value="cliente">
-                    {{ cliente.nombre }} - {{ cliente.dni }}
-                </option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="duracion" class="label">Duración del alquiler (días):</label>
-            <input type="number" id="duracion" v-model.number="duracionAlquiler" :disabled="!clienteSeleccionado"
-                class="input">
-        </div>
-        <div class="form-group">
-            <label for="fechaInicio" class="label">Fecha de inicio del alquiler:</label>
-            <input type="date" id="fechaInicio" v-model="fechaInicioAlquiler" :disabled="!clienteSeleccionado"
-                class="input">
-        </div>
-        <div class="form-group">
-            <button @click="registrarAlquiler" :disabled="!clienteSeleccionado || !duracionAlquiler || !fechaInicioAlquiler"
-                class="button">Alquilar</button>
+        <div v-if="mostrarCampos">
+            <div class="form-group">
+                <label for="vehiculo" class="label">Vehículo:</label>
+                <select id="vehiculo" v-model="vehiculoSeleccionado" :disabled="!modeloSeleccionado" class="select">
+                    <option value="">Selecciona un vehículo</option>
+                    <option v-for="vehiculo in vehiculosDisponibles" :key="vehiculo.id" :value="vehiculo.id">
+                        {{ obtenerModelo(vehiculo.idModelo) }} - {{ vehiculo.precioDia }}€/día
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="cliente" class="label">Cliente:</label>
+                <select id="cliente" v-model="clienteSeleccionado" :disabled="!vehiculoSeleccionado" class="select">
+                    <option value="">Selecciona un cliente</option>
+                    <option v-for="cliente in clientes" :key="cliente.id" :value="cliente">
+                        {{ cliente.nombre }} - {{ cliente.dni }}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="duracion" class="label">Duración del alquiler (días):</label>
+                <input type="number" id="duracion" v-model.number="duracionAlquiler" :disabled="!clienteSeleccionado"
+                    class="input">
+            </div>
+            <div class="form-group">
+                <label for="fechaInicio" class="label">Fecha de inicio del alquiler:</label>
+                <input type="date" id="fechaInicio" v-model="fechaInicioAlquiler" :disabled="!clienteSeleccionado"
+                    class="input">
+            </div>
+            <div class="form-group">
+                <button @click="registrarAlquiler" :disabled="!clienteSeleccionado || !duracionAlquiler || !fechaInicioAlquiler"
+                    class="button">Alquilar</button>
+            </div>
         </div>
         <div v-if="alquilerRealizado" class="info-section">
             <h3 class="subtitle">Alquiler Realizado</h3>
@@ -57,7 +62,7 @@
         </div>
     </div>
 </template>
-  
+
 <script>
 export default {
     data() {
@@ -73,7 +78,8 @@ export default {
             duracionAlquiler: null,
             fechaInicioAlquiler: '',
             precioTotal: 0,
-            alquilerRealizado: false
+            alquilerRealizado: false,
+            mostrarCampos: false
         };
     },
     mounted() {
@@ -101,7 +107,7 @@ export default {
                     this.marcas = data;
                 })
                 .catch(error => {
-                    console.error('Error al cargar las marcas:', error);
+                    
                 });
         },
         obtenerClientes() {
@@ -111,7 +117,7 @@ export default {
                     this.clientes = data;
                 })
                 .catch(error => {
-                    console.error('Error al cargar los clientes:', error);
+                    
                 });
         },
         obtenerVehiculos() {
@@ -121,7 +127,7 @@ export default {
                     this.vehiculos = data;
                 })
                 .catch(error => {
-                    console.error('Error al cargar los clientes:', error);
+                    
                 });
         },
         cargarModelos() {
@@ -139,10 +145,14 @@ export default {
                     this.fechaInicioAlquiler = '';
                     this.precioTotal = 0;
                     this.alquilerRealizado = false;
+                    this.mostrarCampos = false; 
                 })
                 .catch(error => {
-                    console.error('Error al cargar los modelos:', error);
+                    
                 });
+        },
+        mostrarVehiculos() {
+            this.mostrarCampos = true;
         },
         registrarAlquiler() {
             const nuevoAlquiler = {
@@ -177,13 +187,13 @@ export default {
 
                 })
                 .catch(error => {
-                    console.error('Error al registrar el alquiler:', error);
+                   
                 });
         }
     }
 };
 </script>
-  
+
 <style scoped>
 .title {
     text-align: center;

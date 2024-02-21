@@ -41,7 +41,7 @@ export default {
         this.marcas = data;
       })
       .catch(error => {
-        console.error('Error al cargar las marcas:', error);
+  
       });
   },
   methods: {
@@ -62,11 +62,10 @@ export default {
       fetch(URL, init)
         .then(response => response.json())
         .then(data => {
-          console.log('Modelo agregado:', data);
           this.limpiarFormulario();
         })
         .catch(error => {
-          console.error('Error al agregar el modelo:', error);
+         
         });
     },
     limpiarFormulario() {

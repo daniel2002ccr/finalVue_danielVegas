@@ -44,7 +44,6 @@
         fetch(URL, init)
           .then(response => response.json())
           .then(data => {
-            console.log('Marca agregada:', data);
             this.nuevaMarca = {
               nombre: '',
               anioFundacion: null,
@@ -52,7 +51,7 @@
             };
           })
           .catch(error => {
-            console.error('Error al agregar la marca:', error);
+            
           });
       }
     }

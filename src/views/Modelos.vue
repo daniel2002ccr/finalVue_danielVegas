@@ -60,7 +60,7 @@ export default {
                     this.marcas = data;
                 })
                 .catch(error => {
-                    console.error('Error al cargar las marcas:', error);
+                    
                 });
         },
         cargarModelos() {
@@ -70,14 +70,12 @@ export default {
                     this.modelos = data;
                     this.marcaSeleccionadaNombre = this.marcas.find(marca => marca.id === this.marcaSeleccionada).nombre;
 
-                    // Calcular precio medio y extra por modelo
                     const modelosConPrecioExtraCero = this.modelos.filter(modelo => modelo.extraPorModelo === 0);
                     for (const modelo of modelosConPrecioExtraCero) {
-                        this.nuevoExtra[modelo.id] = ''; // Inicializar el objeto nuevoExtra
+                        this.nuevoExtra[modelo.id] = '';
                     }
 
-                    // Obtener detalles de los vehículos
-                    this.obtenerDetallesVehiculos(); // Llamada aquí para garantizar que se ejecute después de cargar los modelos
+                    this.obtenerDetallesVehiculos(); 
                 })
                 .catch(error => {
                     console.error('Error al cargar los modelos:', error);
@@ -87,7 +85,7 @@ export default {
             fetch('http://localhost:3000/vehiculos')
                 .then(response => response.json())
                 .then(vehiculos => {
-                    // Asignar el precio de alquiler de los vehículos a los modelos correspondientes
+
                     this.modelos.forEach(modelo => {
                         const vehiculo = vehiculos.find(v => v.idModelo === modelo.id);
                         modelo.precioDia = vehiculo ? vehiculo.precioDia : 0;
@@ -117,13 +115,10 @@ export default {
                 body: JSON.stringify({ extraPorModelo: parseFloat(nuevoExtra) })
             })
                 .then(response => {
-                    if (!response.ok) {
-                        throw new Error('No se pudo actualizar el extra por modelo.');
-                    }
                     this.cargarModelos();
                 })
                 .catch(error => {
-                    console.error('Error al actualizar el extra por modelo:', error);
+                   
                 });
         }
     }

@@ -52,7 +52,7 @@ export default {
           this.marcas = data;
         })
         .catch(error => {
-          console.error('Error al cargar las marcas:', error);
+         
         });
     },
     obtenerDatosModelos() {
@@ -62,7 +62,7 @@ export default {
           this.modelos = data;
         })
         .catch(error => {
-          console.error('Error al cargar los modelos:', error);
+          
         });
     },
     obtenerDatosVehiculos() {
@@ -72,7 +72,7 @@ export default {
           this.vehiculos = data;
         })
         .catch(error => {
-          console.error('Error al cargar los vehículos:', error);
+         
         });
     },
     calcularPrecioMedio(idMarca) {
